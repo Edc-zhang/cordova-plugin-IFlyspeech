@@ -58,6 +58,8 @@
 		<source-file src="src/android/libs/Msc.jar" target-dir="libs"/>
 		<source-file src="src/android/libs/Sunflower.jar" target-dir="libs"/>
 		<source-file src="src/android/libs/armeabi/libmsc.so" target-dir="libs/armeabi"/>
+	    	<source-file src="src/android/libs/arm64-v8a/libmsc.so" target-dir="libs/arm64-v8a"/>
+		<source-file src="src/android/libs/armeabi-v7a/libmsc.so" target-dir="libs/armeabi-v7a"/>
 
 		<!--layout-->
 		<source-file src="src/android/res/layout/activity_xunfei_dialog.xml" target-dir="res/layout"/>
