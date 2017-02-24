@@ -103,9 +103,9 @@ Speech.prototype = {
     },
 
 
-   startListen: function(func,fail,isShow) {
+   startListen: function(func,fail,isShow,isShowPunc) {
         this.onspeakcallback = func;
-               exec(null, null, 'Speech', 'startListening', [{language:'zh_cn', accent:'mandarin'},isShow]);
+               exec(null, null, 'Speech', 'startListening', [{language:'zh_cn', accent:'mandarin'},isShow,isShowPunc]);
     },
 
     stopListen: function() {
