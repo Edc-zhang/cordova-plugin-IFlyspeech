@@ -47,6 +47,7 @@
     //是否有UI弹窗
 //    BOOL isShowDialog = [command.arguments objectAtIndex:1];
     NSString *isShowDialog = [NSString stringWithFormat:@"%@",[command.arguments objectAtIndex:1]];
+    NSString *isShowPunc = [NSString stringWithFormat:@"%@",[command.arguments objectAtIndex:2]];
     if ([isShowDialog isEqualToString:@"0"]) {
         if (!self.recognizer){
             self.recognizer = [IFlySpeechRecognizer sharedInstance];
@@ -56,7 +57,10 @@
             [self.recognizer setParameter:@"700" forKey:@"vad_eos"];
             [self.recognizer setParameter:@"0" forKey:@"plain_result"];
             [self.recognizer setParameter:@"asr.pcm" forKey:@"asr_audio_path"];
-            
+            //是否显示标点
+            if ([isShowPunc isEqualToString:@"0"]) {
+                [self.recognizer setParameter:@"0" forKey:@"asr_ptt"];
+            }
             NSLog(@"Speech :: createRecognizer");
         }
         if ((NSNull *)options != [NSNull null]) {
@@ -81,6 +85,9 @@
         [self.iflyRecognizerView setParameter: @"iat" forKey: [IFlySpeechConstant IFLY_DOMAIN]];
         //asr_audio_path保存录音文件名，如不再需要，设置value为nil表示取消，默认目录是documents
         [self.iflyRecognizerView setParameter:@"asrview.pcm " forKey:[IFlySpeechConstant ASR_AUDIO_PATH]];
+         if ([isShowPunc isEqualToString:@"0"]) {
+            [self.recognizer setParameter:@"0" forKey:@"asr_ptt"];
+        }
         [self.iflyRecognizerView start];
     }
 }
