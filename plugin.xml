@@ -267,6 +267,7 @@
         <framework src="Foundation.framework" />
         <framework src="CoreTelephony.framework" />
         <framework src="CoreLocation.framework" />
+	<framework src="Contacts.framework" />
         
         <framework src="src/ios/iflyMSC.framework" custom="true" />
     </platform>
