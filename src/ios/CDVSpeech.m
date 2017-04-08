@@ -86,7 +86,7 @@
         //asr_audio_path保存录音文件名，如不再需要，设置value为nil表示取消，默认目录是documents
         [self.iflyRecognizerView setParameter:@"asrview.pcm " forKey:[IFlySpeechConstant ASR_AUDIO_PATH]];
          if ([isShowPunc isEqualToString:@"0"]) {
-            [self.recognizer setParameter:@"0" forKey:@"asr_ptt"];
+            [self.iflyRecognizerView setParameter:@"0" forKey:@"asr_ptt"];
         }
         [self.iflyRecognizerView start];
     }
