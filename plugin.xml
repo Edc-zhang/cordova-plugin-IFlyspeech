@@ -247,7 +247,7 @@
             </feature>
         </config-file>
         
-        <config-file target="*-Info.plist" parent="Privacy - Microphone Usage Description">
+        <config-file target="*-Info.plist" parent="NSMicrophoneUsageDescription">
             <string></string>
         </config-file>
         
