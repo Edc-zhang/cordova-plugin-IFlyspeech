@@ -1,9 +1,11 @@
 package com.thomas.xunfeilistenspeaking;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -13,6 +15,7 @@ import com.iflytek.cloud.*;
 import com.iflytek.sunflower.FlowerCollector;
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
+import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,6 +32,8 @@ public class XunfeiListenSpeaking extends CordovaPlugin{
     private CallbackContext callbackContext;
     private Toast mToast;
     private Handler mHandler = new Handler();
+    // 录音权限
+    private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
 
     private  SpeechSynthesizer mTts;
 
@@ -40,6 +45,9 @@ public class XunfeiListenSpeaking extends CordovaPlugin{
     private String mEngineType = SpeechConstant.TYPE_CLOUD;
     // 用HashMap存储听写结果
     private HashMap<String, String> mIatResults = new LinkedHashMap<String, String>();
+
+    // 录音开启活动
+    private Intent intent;
     @Override
     protected void pluginInitialize() {
         super.pluginInitialize();
@@ -74,11 +82,17 @@ public class XunfeiListenSpeaking extends CordovaPlugin{
                 punc = "1";
             }
             if (isShowDialog){
-                Intent intent = new Intent();
+                intent = new Intent();
                 intent.setClass(context, XunfeiDialogActivity.class);
                 intent.putExtra("isShowDialog",isShowDialog);
                 intent.putExtra("punc",punc);
-                cordova.startActivityForResult( this,intent, DIALOG_ACTIVIT_CODE);
+
+                if(!cordova.hasPermission(Manifest.permission.RECORD_AUDIO)){
+                  cordova.requestPermission(this, REQUEST_RECORD_AUDIO_PERMISSION, Manifest.permission.RECORD_AUDIO);
+                }else{
+                  cordova.startActivityForResult( this,intent, DIALOG_ACTIVIT_CODE);
+                }
+
             }else {
                 startListenWidthNotDialog(punc);
             }
@@ -395,5 +409,19 @@ public class XunfeiListenSpeaking extends CordovaPlugin{
         });
     }
 
+  public void onRequestPermissionResult(int requestCode, String[] permissions, int[] grantResults) throws JSONException{
+    for (int r : grantResults) {
+      if(r == PackageManager.PERMISSION_DENIED){
+        Log.d(TAG, "onRequestPermissionResult fail");
+        this.callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, "权限被用户拒绝！"));
+      }
+    }
+    switch (requestCode){
+      case REQUEST_RECORD_AUDIO_PERMISSION:
+        Log.d(TAG, "onRequestPermissionResult success");
+        cordova.startActivityForResult( this,intent, DIALOG_ACTIVIT_CODE);
+        break;
+    }
+  }
 
 }
